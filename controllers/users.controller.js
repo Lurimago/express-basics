@@ -3,7 +3,9 @@ const { User } = require('../models/user.model');
 
 const getAllUsers = async (req, res) => {
 	try {
-		const users = await User.findAll();
+		const users = await User.findAll({
+			where: { status: 'active' },
+		});
 
 		res.status(200).json({
 			status: 'success',
@@ -35,18 +37,7 @@ const createUser = async (req, res) => {
 const updateUser = async (req, res) => {
 	try {
 		const { name } = req.body;
-		const { id } = req.params;
-
-		// Check if the user exists before update
-		const user = await User.findOne({ where: { id } });
-
-		// If user doesn't exist, send error message
-		if (!user) {
-			return res.status(404).json({
-				status: 'error',
-				message: 'User not found',
-			});
-		}
+		const { user } = req;
 
 		// Method 1: Update by using the model
 		// await User.update({ name }, { where: { id } });
@@ -65,20 +56,7 @@ const updateUser = async (req, res) => {
 
 const deleteUser = async (req, res) => {
 	try {
-		const { id } = req.params;
-
-		// Check if user exists before deletion
-		const user = await User.findOne({ where: { id } });
-
-		// If user doesn't exist, send error message
-		if (!user) {
-			return res.status(404).json({
-				status: 'error',
-				message: 'User not found',
-			});
-		}
-
-		// If user exist, remove it from db
+		const { user } = req;
 
 		// Method 1: Delete by using the model
 		// User.destroy({ where: { id } })
