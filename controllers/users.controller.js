@@ -1,18 +1,18 @@
 // Models
 const { User } = require('../models/user.model');
+const { Post } = require('../models/post.model');
 
 const getAllUsers = async (req, res) => {
 	try {
 		const users = await User.findAll({
 			where: { status: 'active' },
+			include: { model: Post },
 		});
 
 		res.status(200).json({
-			status: 'success',
-			data: {
-				users,
-			},
-		});
+			status: "success",
+			data: { users },
+		  });
 	} catch (error) {
 		console.log(error);
 	}
