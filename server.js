@@ -1,33 +1,29 @@
-const { app } = require('./app');
-const { db } = require('./utils/database.util');
+const { app } = require("./app");
 
-// Models
-const { User } = require('./models/user.model');
-const { Post } = require('./models/post.model');
+// Utils
+const { initModels } = require("./models/initModels");
+const { db } = require("./utils/database.util");
 
 const startServer = async () => {
-	try {
-		// Database authenticated
-		await db.authenticate();
+  try {
+    // Database authenticated
+    await db.authenticate();
 
-		// Establish models relations
-	
-		// 1 Movie <----> M Review
-		User.hasMany(Post, { foreignKey: "userId" });
-		Post.belongsTo(User);
+    // Establish models relations
+    initModels();
 
-		// Database synced
-		await db.sync();
+    // Database synced
+    await db.sync();
 
-		// Set server to listen
-		const PORT = 4000;
+    // Set server to listen
+    const PORT = 4000;
 
-		app.listen(PORT, () => {
-			console.log('Express app running!');
-		});
-	} catch (error) {
-		console.log(error);
-	}
+    app.listen(PORT, () => {
+      console.log("Express app running!");
+    });
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 startServer();
